@@ -31,8 +31,7 @@ trap 'rm -fr "$tmpdir"' EXIT
 
 if [ -z "${1:-}" ] || \
    [ -z "${2:-}" ] || \
-   [ -n "${3:-}" ] || \
-   ! [[ "$1" =~ ^http(s|)://.*getcourse.ru/.* ]]
+   [ -n "${3:-}" ]
 then
 	_echo_help
 	exit 1
@@ -51,7 +50,7 @@ curl -L --output "$second_playlist" "$(tail -n1 "$main_playlist")"
 c=0
 while read -r line
 do
-	if ! [[ "$line" =~ ^http(s|):// ]]; then continue; fi
+	if ! [[ "$line" =~ ^http ]]; then continue; fi
 	curl -L --output "${tmpdir}/$(printf '%05d' "$c").ts" "$line"
 	c=$((++c))
 done < "$second_playlist"

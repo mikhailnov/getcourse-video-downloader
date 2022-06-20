@@ -26,3 +26,10 @@
 `bash /tmp/getcourse-video-downloader.sh "ДЛИННАЯ_ССЫЛКА" "Имя файла.ts"`
 
 Первым аргументом идет ссылка, вторым — имя файла, куда сохранить скачанное, рекомендуемое расширение — ts.
+
+На ROSA Linux можно установить этот скрипт из репозитория:
+
+```
+sudo dnf install getcourse-video-downloader`
+getcourse-video-downloader "ДЛИННАЯ_ССЫЛКА" "Имя файла.ts"
+```

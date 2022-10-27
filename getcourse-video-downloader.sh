@@ -22,6 +22,8 @@ _echo_help(){
 Пример: \"Как скачать видео с GetCourse.ts\"
 Скопируйте ссылку и запустите скрипт, например, так:
 $a0 \"эта_ссылка\" \"Как скачать видео с GetCourse.ts\"
+Инструкция с графическими иллюстрациями здесь: https://github.com/mikhailnov/getcourse-video-downloader
+О проблемах в работе сообщайте сюда: https://github.com/mikhailnov/getcourse-video-downloader/issues
 "
 }
 
@@ -42,10 +44,29 @@ touch "$result_file"
 
 main_playlist="$(mktemp)"
 curl -L --output "$main_playlist" "$URL"
-# В плей-листе перечислены ссылки на плей-листы частей видео а разных разрешениях,
-# последним идет самое большое разрешение, его и скачиваем
 second_playlist="$(mktemp)"
-curl -L --output "$second_playlist" "$(tail -n1 "$main_playlist")"
+# Бывает (я встречал) 2 варианта видео
+# Может быть, можно проверять [[ "$URL" =~ .*".m3u8".* ]]
+if grep -qE '^http(s|)://.*\.ts' "$main_playlist"
+then
+	# В плей-листе перечислены напрямую ссылки на фрагменты видео
+	# (если запустили проигрывание, зашли в инструменты разработчика Chromium -> Network,
+	# нашли файл m3u8 и скопировали ссылку на него)
+	cp "$main_playlist" "$second_playlist"
+else
+	# В плей-листе перечислены ссылки на плей-листы частей видео а разных разрешениях,
+	# последним идет самое большое разрешение, его и скачиваем
+	tail="$(tail -n1 "$main_playlist")"
+	if ! [[ "$tail" =~ ^"http"(s|)"://" ]]; then
+		echo "В содержимом заданной ссылки нет прямых ссылок на файлы *.ts (первый вариант),"
+		echo "также последняя строка в ней не содержит ссылки на другой плей-лист (второй вариант)."
+		echo "Либо указана неправильная ссылка, либо GetCourse изменил алгоритмы."
+		echo "Если уверены, что дело в изменившихся алгоритмах GetCourse, опишите проблему здесь:"
+		echo "https://github.com/mikhailnov/getcourse-video-downloader/issues (на русском)."
+		exit 1
+	fi
+	curl -L --output "$second_playlist" "$tail"
+fi
 
 c=0
 while read -r line

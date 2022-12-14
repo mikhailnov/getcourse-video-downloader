@@ -47,7 +47,7 @@ curl -L --output "$main_playlist" "$URL"
 second_playlist="$(mktemp)"
 # Бывает (я встречал) 2 варианта видео
 # Может быть, можно проверять [[ "$URL" =~ .*".m3u8".* ]]
-if grep -qE '^http(s|)://.*\.ts' "$main_playlist"
+if grep -qE '^https?:\/\/.*\.ts' "$main_playlist"
 then
 	# В плей-листе перечислены напрямую ссылки на фрагменты видео
 	# (если запустили проигрывание, зашли в инструменты разработчика Chromium -> Network,

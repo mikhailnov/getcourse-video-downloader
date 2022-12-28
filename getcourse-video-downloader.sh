@@ -68,13 +68,16 @@ else
 	curl -L --output "$second_playlist" "$tail"
 fi
 
-c=0
-while read -r line
+grep -n ^http < "$second_playlist" | \
+sed -e 's/^\([0-9]*\):\(.*\)$/\1 \2/' | \
+while read -r num url
 do
-	if ! [[ "$line" =~ ^http ]]; then continue; fi
-	curl -L --output "${tmpdir}/$(printf '%05d' "$c").ts" "$line"
-	c=$((++c))
-done < "$second_playlist"
+	echo "--location"
+	echo "url = \"$url\""
+	echo "output = \"${tmpdir}/$(printf %05d $num).ts\""
+	echo
+done | \
+curl --parallel-max 10 --parallel --config -
 
 cat "$tmpdir"/*.ts > "$result_file"
 echo "Скачивание завершено. Результат здесь:

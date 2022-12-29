@@ -43,7 +43,7 @@ result_file="$2"
 touch "$result_file"
 
 main_playlist="$(mktemp)"
-curl -s -L --output "$main_playlist" "$URL"
+curl --compressed -s -L --output "$main_playlist" "$URL"
 second_playlist="$(mktemp)"
 # Бывает (я встречал) 2 варианта видео
 # Может быть, можно проверять [[ "$URL" =~ .*".m3u8".* ]]
@@ -65,7 +65,7 @@ else
 		echo "https://github.com/mikhailnov/getcourse-video-downloader/issues (на русском)."
 		exit 1
 	fi
-	curl -s -L --output "$second_playlist" "$tail"
+	curl --compressed -s -L --output "$second_playlist" "$tail"
 fi
 
 c=0

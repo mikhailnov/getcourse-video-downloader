@@ -43,7 +43,7 @@ result_file="$2"
 touch "$result_file"
 
 main_playlist="$(mktemp)"
-curl -L --output "$main_playlist" "$URL"
+curl --insecure -L --output "$main_playlist" "$URL"
 second_playlist="$(mktemp)"
 # Бывает (я встречал) 2 варианта видео
 # Может быть, можно проверять [[ "$URL" =~ .*".m3u8".* ]]
@@ -65,14 +65,14 @@ else
 		echo "https://github.com/mikhailnov/getcourse-video-downloader/issues (на русском)."
 		exit 1
 	fi
-	curl -L --output "$second_playlist" "$tail"
+	curl --insecure -L --output "$second_playlist" "$tail"
 fi
 
 c=0
 while read -r line
 do
 	if ! [[ "$line" =~ ^http ]]; then continue; fi
-	curl -L --output "${tmpdir}/$(printf '%05d' "$c").ts" "$line"
+	curl --insecure -L --output "${tmpdir}/$(printf '%05d' "$c").ts" "$line"
 	c=$((++c))
 done < "$second_playlist"
 

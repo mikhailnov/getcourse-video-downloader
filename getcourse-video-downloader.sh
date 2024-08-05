@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Simple script to download videos from GetCourse.ru
 # on Linux/*BSD
-# Dependencies: bash, coreutils, curl
+# Dependencies: bash, coreutils, curl, grep
 
 set -eu
 set +f

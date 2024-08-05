@@ -58,3 +58,6 @@ GetCourse иногда меняет алгоритмы, ниже описано 
 sudo dnf install getcourse-video-downloader`
 getcourse-video-downloader "ДЛИННАЯ_ССЫЛКА" "Имя файла.ts"
 ```
+
+## Другие реализации
+* [GetCoursePythonDownloader](https://github.com/snhplayer/GetCoursePythonDownloader)

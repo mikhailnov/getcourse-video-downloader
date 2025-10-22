@@ -73,7 +73,7 @@ c=0
 while read -r line
 do
 	if ! [[ "$line" =~ ^http ]]; then continue; fi
-	curl --retry 12 -L --output "${tmpdir}/$(printf '%05d' "$c").ts" "$line"
+	curl --retry 12 --retry-all-errors -Y 102400 -y 5 -L --output "${tmpdir}/$(printf '%05d' "$c").ts" "$line"
 	c=$((++c))
 done < "$second_playlist"
 
